@@ -792,7 +792,7 @@ module Bitcoin
           0 => "a2b106ceba3be0c6d097b2a6a6aacf9d638ba8258ae478158f449c321061e0b2",
       }
     })
-
+=begin
   NETWORKS[:dogecoin] = NETWORKS[:litecoin].merge({
       project: :dogecoin,
       magic_head: "\xc0\xc0\xc0\xc0",
@@ -898,7 +898,7 @@ module Bitcoin
       reset_target_block: 157500,
       auxpow_start_block: 158100
     })
-
+=end
   NETWORKS[:namecoin] = NETWORKS[:bitcoin].merge({
       project: :namecoin,
       magic_head: "\xF9\xBE\xB4\xFE",
