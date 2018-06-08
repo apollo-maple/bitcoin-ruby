@@ -22,7 +22,7 @@ module Bitcoin
   autoload :BloomFilter,'bitcoin/bloom_filter'
 
   autoload :Dogecoin,   'bitcoin/dogecoin'
-  autoload :Litecoin,   'bitcoin/litecoin'
+  autoload :Monacoin,   'bitcoin/monacoin'
 
   autoload :ContractHash,   'bitcoin/contracthash'
 
@@ -99,7 +99,7 @@ module Bitcoin
 
       hex = decode_base58(address) rescue nil
       if hex && hex.bytesize == 50 && address_checksum?(address)
-        # Litecoin updates the P2SH version byte, and this method should recognize both.
+        # Monacoin updates the P2SH version byte, and this method should recognize both.
         p2sh_versions = [p2sh_version]
         if Bitcoin.network[:legacy_p2sh_versions]
           p2sh_versions += Bitcoin.network[:legacy_p2sh_versions]
@@ -727,80 +727,69 @@ module Bitcoin
       }
     })
 
-  NETWORKS[:litecoin] = NETWORKS[:bitcoin].merge({
-      project: :litecoin,
-      magic_head: "\xfb\xc0\xb6\xdb",
-      message_magic: "Litecoin Signed Message:\n",
-      address_version: "30",
-      p2sh_version: "32",
+  NETWORKS[:monacoin] = NETWORKS[:bitcoin].merge({
+      project: :monacoin,
+      magic_head: "\xdb\xb6\xc0\xfb",
+      message_magic: "Monacoin Signed Message:\n",
+      address_version: "32",
+      p2sh_version: "37",
       legacy_p2sh_versions: ["05"],
-      privkey_version: "b0",
-      bech32_hrp: "ltc",
-      extended_privkey_version: "019d9cfe",
-      extended_pubkey_version: "019da462",
-      default_port: 9333,
-      protocol_version: 70002,
-      max_money: 84_000_000 * COIN,
+      privkey_version: "b2",
+      bech32_hrp: "mona",
+      extended_privkey_version: "0488ade4",
+      extended_pubkey_version: "0488b21e",
+      default_port: 9401,
+      protocol_version: 70015,
+      max_money: 105_120_000 * COIN,
       min_tx_fee: 100_000, # 0.001 LTC
       min_relay_tx_fee: 100_000, # 0.001 LTC
       free_tx_bytes: 5_000,
       dust: CENT / 10,
       per_dust_fee: false,
-      reward_halving: 840_000,
-      retarget_time: 302400, # 3.5 days
+      reward_halving: 1_051_200,
+      retarget_time: 1, # 3.5 days
       dns_seeds: [
-        "dnsseed.litecointools.com",
-        "dnsseed.litecoinpool.org",
-        "seed-a.litecoin.loshan.co.uk",
-        "dnsseed.thrasher.io",
-        "dnsseed.koin-project.com",
+        "dnsseed.monacoin.org"
       ],
-      genesis_hash: "12a765e31ffd4059bada1e25190f6e98c99d9714d334efa41a195a7e7e04bfe2",
+      genesis_hash: "ff9f1c0116d19de7c9963845e129f9ed1bfc0b376eb54fd7afa42e0d418c8bb6",
       proof_of_work_limit: 0x1e0fffff,
       alert_pubkeys: ["040184710fa689ad5023690c80f3a49c8f13f8d45b8c857fbcbc8bc4a8e4d3eb4b10f4d4604fa08dce601aaf0f470216fe1b51850b4acf21b179c45070ac7b03a9"],
       known_nodes: [],
       checkpoints: {
-             1 => "80ca095ed10b02e53d769eb6eaf92cd04e9e0759e5be4a8477b42911ba49c78f",
-             2 => "13957807cdd1d02f993909fa59510e318763f99a506c4c426e3b254af09f40d7",
-          1500 => "841a2965955dd288cfa707a755d05a54e45f8bd476835ec9af4402a2b59a2967",
-          4032 => "9ce90e427198fc0ef05e5905ce3503725b80e26afd35a987965fd7e3d9cf0846",
-          8064 => "eb984353fc5190f210651f150c40b8a4bab9eeeff0b729fcb3987da694430d70",
-         16128 => "602edf1859b7f9a6af809f1d9b0e6cb66fdc1d4d9dcd7a4bec03e12a1ccd153d",
-         23420 => "d80fdf9ca81afd0bd2b2a90ac3a9fe547da58f2530ec874e978fce0b5101b507",
-         50000 => "69dc37eb029b68f075a5012dcc0419c127672adb4f3a32882b2b3e71d07a20a6",
-         80000 => "4fcb7c02f676a300503f49c764a89955a8f920b46a8cbecb4867182ecdb2e90a",
-        120000 => "bd9d26924f05f6daa7f0155f32828ec89e8e29cee9e7121b026a7a3552ac6131",
-        161500 => "dbe89880474f4bb4f75c227c77ba1cdc024991123b28b8418dbbf7798471ff43",
-        179620 => "2ad9c65c990ac00426d18e446e0fd7be2ffa69e9a7dcb28358a50b2b78b9f709",
-        240000 => "7140d1c4b4c2157ca217ee7636f24c9c73db39c4590c4e6eab2e3ea1555088aa",
-        383640 => "2b6809f094a9215bafc65eb3f110a35127a34be94b7d0590a096c3f126c6f364",
-        409004 => "487518d663d9f1fa08611d9395ad74d982b667fbdc0e77e9cf39b4f1355908a3",
-        456000 => "bf34f71cc6366cd487930d06be22f897e34ca6a40501ac7d401be32456372004",
-        541794 => "1cbccbe6920e7c258bbce1f26211084efb19764aa3224bec3f4320d77d6a2fd2",
+          1500 => "9f42d51d18d0a8914a00664c433a0ca4be3eed02f9374d790bffbd3d3053d41d",
+          4000 => "2c60edac7d9f44d90d1e218af2a8085e78b735185c5bf42f9fe9dbd0e604c97b",
+          8000 => "61d4d053b1a4c6deb4c7e806cedd876f25b51da6c51b209109579c7b9892e5c2",
+         16000 => "3c4a8887bb3ae0599abfefe765f7c911fbfe98b3f23d7f70b05bf49cf62ebdaf",
+         32000 => "c0703986c1c6a9052478db5e52432e5a1e55d6b6362b85f0ffdbb61ce3311b77",
+         58700 => "a9c5d9878864b77ba52b068787b83ce2fcf526c5899f40af51c9d441eeb4c84d",
+         80000 => "c99b83da7328b58251d16f4646da222b0280f180bd208efa5e3256c9eb6ea2be",
+        115000 => "75e642c003e5bd748b679472e981b7b2f81f344b3f197029f84470256cef33e4",
+        189250 => "1bea3d5c25a8097eef2e70ece4beb6c502b895fe00056552948309beb3497c99",
+        300000 => "11095515590421444ba29396d9122c234baced79be8b32604acc37cf094558ab",
+        444000 => "3ed05516cdce4db93b135189592c7e2b37d768f99a1819a1d2ea3a8e5b8439a8",
+        904000 => "53f5b7f9440e1d830bd1c265c69fb0e7c7988e343b2202a704406d04a8cd02e5",
       },
       auxpow_chain_id: 1,
     })
 
-  NETWORKS[:litecoin_testnet] = NETWORKS[:litecoin].merge({
-      magic_head: "\xfd\xd2\xc8\xf1",
+  NETWORKS[:monacoin_testnet] = NETWORKS[:monacoin].merge({
+      magic_head: "\xf1\xc8\xd2\xfd",
       address_version: "6f",
       p2sh_version: "3a",
       legacy_p2sh_versions: nil,
       privkey_version: "ef",
-      bech32_hrp: "tltc",
+      bech32_hrp: "tmona",
       extended_privkey_version: "0436ef7d",
       extended_pubkey_version: "0436f6e1",
-      default_port: 19335,
+      default_port: 19403,
       dns_seeds: [
-        "testnet-seed.ltc.xurious.com",
-        "seed-b.litecoin.loshan.co.uk",
-        "dnsseed-testnet.thrasher.io",
+        "testnet-dnsseed.monacoin.org",
       ],
-      genesis_hash: "4966625a4b2851d9fdee139e56211a0d88575f59ed816ff5e6a63deb4e3e29a0",
+      genesis_hash: "a2b106ceba3be0c6d097b2a6a6aacf9d638ba8258ae478158f449c321061e0b2",
       alert_pubkeys: ["04302390343f91cc401d56d68b123028bf52e5fca1939df127f63c6467cdf9c8e2c14b61104cf817d0b780da337893ecc4aaff1309e536162dabbdb45200ca2b0a"],
       known_nodes: [],
       checkpoints: {
-        546 => "bf434a4c665307f52a041ee40faa7bf56284c5f3b5d11bf6182aba537961f86c",
+          0 => "a2b106ceba3be0c6d097b2a6a6aacf9d638ba8258ae478158f449c321061e0b2",
       }
     })
 
